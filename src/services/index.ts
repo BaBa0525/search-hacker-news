@@ -1,4 +1,4 @@
-import type { SearchResults } from "@/type/api";
+import type { SearchResults } from "@/types/api";
 
 const API_URL = "https://hn.algolia.com/api/v1/search";
 
