@@ -1,9 +1,11 @@
 /** @type {import("eslint").Linter.Config} */
 
 module.exports = {
+  plugins: ["@tanstack/query"],
   extends: [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier",
   ],
   rules: {
