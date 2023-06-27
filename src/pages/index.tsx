@@ -1,10 +1,11 @@
+import { SearchTable } from "@/components/SearchTable";
 import { Layout } from "@/layouts/Layout";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
     <Layout>
-      <h1>Hello Cooby</h1>
+      <SearchTable />
     </Layout>
   );
 };
