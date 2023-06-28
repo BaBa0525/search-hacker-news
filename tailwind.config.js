@@ -8,8 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        search: {
+        primary: {
           bg: "#eee7f4",
+        },
+        search: {
+          bg: "#e5d6f3",
           line: "#aa186f",
         },
       },
