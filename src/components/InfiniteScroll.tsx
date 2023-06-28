@@ -33,15 +33,13 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     [hasMore, next]
   );
 
-  const pageLength = pages.length;
-
   return (
     <div className="flex flex-col gap-2">
       {pages.map((page, pageIndex) => (
         <div key={page.page} className="flex flex-col gap-2">
           {page.hits.map((hit, postIndex) => {
             if (
-              pageLength === pageIndex + 1 &&
+              pages.length === pageIndex + 1 &&
               page.hits.length === postIndex + 1
             ) {
               return (
@@ -62,4 +60,3 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     </div>
   );
 };
-// TODO: Implement InfiniteScroll component

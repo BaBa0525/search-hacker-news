@@ -34,20 +34,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
 
   return (
     <a
-      className="flex items-center gap-4 p-2 bg-white rounded group focus:bg-search-line focus:text-white"
+      className="flex items-center gap-4 p-2 bg-white rounded group hover:bg-search-line hover:text-white"
       href={hit.url}
       ref={cardRef}
-      onMouseEnter={() => {
-        cardRef.current?.focus();
-      }}
     >
-      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-focus:text-white" />
+      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-hover:text-white" />
       <article className="flex flex-col flex-1 min-w-0">
         <h4
           className="text-sm font-medium truncate SearchHighlight md:text-base"
           dangerouslySetInnerHTML={{ __html: title }}
         />
-        <div className="flex gap-4 text-xs font-light text-gray-600 md:text-sm group-focus:text-white">
+        <div className="flex gap-4 text-xs font-light text-gray-600 md:text-sm group-hover:text-white">
           <div className="flex gap-1">
             <AiOutlineHeart className="h-full" />
             <span>{hit.points}</span>
