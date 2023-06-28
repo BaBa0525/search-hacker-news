@@ -14,7 +14,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   hasMore,
 }) => {
   const observer = useRef<IntersectionObserver>();
-  const lastElementRef = useCallback<(node: HTMLDivElement | null) => void>(
+  const lastElementRef = useCallback<(node: HTMLLIElement | null) => void>(
     (node) => {
       if (observer.current) {
         observer.current.disconnect();
@@ -34,29 +34,51 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
       {pages.map((page, pageIndex) => (
-        <div key={page.page} className="flex flex-col gap-2">
-          {page.hits.map((hit, postIndex) => {
-            if (
-              pages.length === pageIndex + 1 &&
-              page.hits.length === postIndex + 1
-            ) {
-              return (
-                <div ref={(r) => lastElementRef(r)} key={hit.objectID}>
-                  <ResultCard key={hit.objectID} hit={hit} />
-                </div>
-              );
-            } else {
-              return (
-                <div key={hit.objectID}>
-                  <ResultCard key={hit.objectID} hit={hit} />
-                </div>
-              );
-            }
-          })}
-        </div>
+        <PageSection
+          key={pageIndex}
+          page={page}
+          isLastPage={pageIndex === pages.length - 1}
+          lastElementRef={lastElementRef}
+        />
       ))}
+    </div>
+  );
+};
+
+type PageSectionProps = {
+  page: SearchResults;
+  isLastPage: boolean;
+  lastElementRef: (node: HTMLLIElement | null) => void;
+};
+
+const PageSection: React.FC<PageSectionProps> = ({
+  page,
+  isLastPage,
+  lastElementRef,
+}) => {
+  const resultStart = page.hitsPerPage * page.page + 1;
+  const resultEnd = page.hitsPerPage * page.page + page.hits.length;
+
+  return (
+    <div key={page.page} className="flex flex-col">
+      <h4 className="text-xs font-semibold md:text-sm text-search-line">
+        {`Result ${resultStart} ~ ${resultEnd}`}
+      </h4>
+      <ul className="flex flex-col gap-2">
+        {page.hits.map((hit, postIndex) =>
+          isLastPage && page.hits.length === postIndex + 1 ? (
+            <li ref={lastElementRef} key={hit.objectID}>
+              <ResultCard key={hit.objectID} hit={hit} />
+            </li>
+          ) : (
+            <li key={hit.objectID}>
+              <ResultCard key={hit.objectID} hit={hit} />
+            </li>
+          )
+        )}
+      </ul>
     </div>
   );
 };
