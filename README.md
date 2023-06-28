@@ -69,7 +69,7 @@ Tanstack Query is an impressive package that offers robust asynchronous state ma
 
 #### Dompurify
 
-he Hacker News API offers outstanding search results in HTML format, which is highly beneficial. However, parsing the HTML requires utilizing embedded HTML, which can be risky and possess potential security concerns. Therefore, I utilize this package to sanitize the HTML content for me, ensuring a safer and more secure implementation.
+The Hacker News API offers outstanding search results in HTML format, which is highly beneficial. However, parsing the HTML requires utilizing embedded HTML, which can be risky and possess potential security concerns. Therefore, I utilize this package to sanitize the HTML content for me, ensuring a safer and more secure implementation.
 
 ## Problem that I have encountered & How to solve them
 
