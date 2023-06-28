@@ -1,38 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Search Hacker News
 
-## Getting Started
+Integrate Hacker News API to provide better search experience.
 
-First, run the development server:
+## Features
+
+- RWD
+  ![RWD](/README/RWD.png)
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+  git clone https://link-to-project
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd hacker-news-search
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Install dependencies
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+  pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Start the server
 
-## Learn More
+```bash
+  pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+  pnpm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Or you can just run development server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+  pnpm dev
+```
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Typescript
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+I do like **Typesafe**.
+
+#### Next.js
+
+Next.js, which is highly [recommended]("https://react.dev/learn/start-a-new-react-project") in the React documentation, offers a wide range of features including server-side rendering and filepath routes. The primary reason for choosing Next.js was its convenience and the great developer experience it offers. Moreover, the incorporation of server-side rendering enables flexibility in adding static data to my pages whenever required.
+
+#### TailwindCSS
+
+Tailwind CSS is my preferred CSS framework for several reasons. Firstly, it eliminates the need for me to concern myself with naming classes, saving me time and effort. Additionally, it offers a range of pre-defined styles that are easy to implement, significantly reducing the amount of code required. Moreover, the framework's clear and intuitive nature allows me to easily understand the style of an element without having to refer to the class definition. When combined with VSCode extensions and React components, Tailwind CSS enhances the overall developer experience, making it a truly remarkable choice.
+
+#### Tanstack Query
+
+Tanstack Query is an impressive package that offers robust asynchronous state management capabilities. I opted for it due to its convenient and declarative API, especially for infinite queries. Additionally, it efficiently caches the results of API calls for a customizable duration, which effectively reduces request times.
+
+#### Dompurify
+
+he Hacker News API offers outstanding search results in HTML format, which is highly beneficial. However, parsing the HTML requires utilizing embedded HTML, which can be risky and possess potential security concerns. Therefore, I utilize this package to sanitize the HTML content for me, ensuring a safer and more secure implementation.
+
+## Problem that I have encountered & How to solve them
+
+1. Hacker News API **NO TYPE**
+   I didn't notice any official type definition about the API calls. To address this, I took the sample output to generate the types. Although there are many "any" type, the types are good enough.
+
+2. UI design
+   This bothered me a lot because I'm not majored in design related department. However, UI is greatly affected the users' experiences, which I do really care about. To address this, I refered to the search components in many documentations.
