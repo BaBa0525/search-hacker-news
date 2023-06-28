@@ -1,5 +1,6 @@
 import { useSearchNews } from "@/hooks/useSearchNews";
-import { useState } from "react";
+import { useIsFetching } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
 import { VscLoading } from "react-icons/vsc";
@@ -8,12 +9,12 @@ import { NotFoundIcon } from "./NotFoundIcon";
 
 export const SearchTable: React.FC = () => {
   const [query, setQuery] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const fetchingNum = useIsFetching({ queryKey: ["search", query] });
 
   return (
     <div className="flex flex-col max-w-full max-h-full py-4 rounded-md drop-shadow bg-search-bg">
       <div className="flex items-center flex-shrink-0 h-12 gap-2 px-4 m-4 bg-white border-2 rounded-md border-search-line">
-        {isLoading ? (
+        {fetchingNum !== 0 ? (
           <VscLoading className="flex-shrink-0 w-6 h-6 animate-spin text-search-line" />
         ) : (
           <FiSearch className="flex-shrink-0 w-6 h-6 text-search-line" />
@@ -31,30 +32,31 @@ export const SearchTable: React.FC = () => {
           />
         )}
       </div>
-      <SearchResults query={query} setIsLoading={setIsLoading} />
+      <SearchResults query={query} />
     </div>
   );
 };
 
 type SearchResultsProps = {
   query: string;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const SearchResults: React.FC<SearchResultsProps> = ({
-  query,
-  setIsLoading,
-}) => {
+const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
+  const scrollRef = useRef<HTMLElement>(null);
   const {
     data,
     isInitialLoading,
-    isFetching,
     isError,
     hasNextPage,
+    isFetchedAfterMount,
     fetchNextPage,
   } = useSearchNews({ query });
 
-  setIsLoading(isFetching);
+  useEffect(() => {
+    if (isFetchedAfterMount) {
+      scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    }
+  }, [isFetchedAfterMount]);
 
   if (query === "" || isInitialLoading || !data) {
     return (
@@ -87,7 +89,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   }
 
   return (
-    <section className="px-6 overflow-y-auto">
+    <section className="px-6 overflow-y-auto" ref={scrollRef}>
       <InfiniteScroll
         pages={data.pages}
         next={fetchNextPage}

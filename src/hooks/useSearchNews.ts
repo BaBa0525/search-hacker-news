@@ -17,7 +17,7 @@ export const useSearchNews = ({ query }: UseSearchNewsProps) => {
       return lastPage.page + 1;
     },
     enabled: query !== "",
-    // keepPreviousData: true,
+    keepPreviousData: true,
     staleTime: 1000 * 60,
   });
 };
