@@ -29,9 +29,14 @@ module.exports = {
           outline: {
             dark: "#7c1ce4",
           },
+          scrollbar: {
+            light: "#5d5874",
+            dark: "#aca7bd",
+          },
         },
       },
     },
   },
-  plugins: [],
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

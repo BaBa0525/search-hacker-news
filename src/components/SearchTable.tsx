@@ -89,7 +89,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
   }
 
   return (
-    <section className="px-6 overflow-y-auto" ref={scrollRef}>
+    <section
+      className="px-6 overflow-y-auto scrollbar-thin scrollbar-thumb-search-scrollbar-light dark:scrollbar-thumb-search-scrollbar-dark scrollbar-thumb-rounded-full"
+      ref={scrollRef}
+    >
       <InfiniteScroll
         pages={data.pages}
         next={fetchNextPage}
