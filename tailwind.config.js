@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,13 +9,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          bg: "#eee7f4",
-        },
+        bg: { light: "#eee7f4", dark: "#231d34" },
         search: {
-          bg: "#e5d6f3",
-          line: "#aa186f",
+          bg: {
+            light: "#e5d6f3",
+            dark: "#2a243e",
+          },
+          line: {
+            light: "#aa186f",
+            dark: "#ff7e34",
+          },
           help: "#5c5874",
+          card: {
+            dark: "#14111d",
+          },
+          info: {
+            dark: "#aba8bd",
+          },
+          outline: {
+            dark: "#7c1ce4",
+          },
         },
       },
     },

@@ -12,22 +12,22 @@ export const SearchTable: React.FC = () => {
   const fetchingNum = useIsFetching({ queryKey: ["search", query] });
 
   return (
-    <div className="flex flex-col max-w-full max-h-full py-4 rounded-md drop-shadow bg-search-bg">
-      <div className="flex items-center flex-shrink-0 h-12 gap-2 px-4 m-4 bg-white border-2 rounded-md border-search-line">
+    <div className="flex flex-col max-w-full max-h-full py-4 rounded-md drop-shadow bg-search-bg-light dark:bg-search-bg-dark dark:outline-search-outline-dark dark:outline">
+      <div className="flex items-center flex-shrink-0 h-12 gap-2 px-4 m-4 bg-white border-2 rounded-md dark:bg-search-card-dark border-search-line-light dark:border-search-line-dark">
         {fetchingNum !== 0 ? (
-          <VscLoading className="flex-shrink-0 w-6 h-6 animate-spin text-search-line" />
+          <VscLoading className="flex-shrink-0 w-6 h-6 animate-spin text-search-line-light dark:text-search-line-dark " />
         ) : (
-          <FiSearch className="flex-shrink-0 w-6 h-6 text-search-line" />
+          <FiSearch className="flex-shrink-0 w-6 h-6 text-search-line-light dark:text-search-line-dark" />
         )}
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full h-full text-lg outline-none"
+          className="w-full h-full text-lg bg-transparent outline-none"
           placeholder="Search news"
         />
         {query !== "" && (
           <MdClose
-            className="w-6 h-6 cursor-pointer hover:text-search-line"
+            className="w-6 h-6 cursor-pointer dark:text-white hover:text-search-line-light dark:hover:dark:text-search-line-dark"
             onClick={() => setQuery("")}
           />
         )}

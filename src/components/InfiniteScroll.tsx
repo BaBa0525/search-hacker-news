@@ -51,7 +51,7 @@ const PageSection: React.FC<PageSectionProps> = ({
 
   return (
     <div key={page.page} className="flex flex-col">
-      <h4 className="text-xs font-semibold md:text-sm text-search-line">
+      <h4 className="text-xs font-semibold md:text-sm text-search-line-light dark:text-search-line-dark">
         {`Result ${resultStart} ~ ${resultEnd}`}
       </h4>
       <ul className="flex flex-col gap-2">

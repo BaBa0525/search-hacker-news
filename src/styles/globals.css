@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 body {
-  @apply h-screen bg-primary-bg;
+  @apply h-screen bg-bg-light dark:bg-bg-dark;
 }
 
 .SearchHighlight em {
-  @apply text-search-line not-italic;
+  @apply text-search-line-light not-italic;
   @apply group-hover:text-white group-hover:underline group-hover:underline-offset-2;
+  @apply dark:text-search-line-dark  dark:group-hover:text-black;
 }

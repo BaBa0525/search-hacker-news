@@ -34,17 +34,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
 
   return (
     <a
-      className="flex items-center gap-4 p-2 bg-white rounded group hover:bg-search-line hover:text-white"
+      className="flex items-center gap-4 p-2 bg-white rounded dark:bg-search-card-dark group hover:bg-search-line-light dark:hover:bg-search-line-dark hover:text-white dark:hover:text-black"
       href={hit.url}
       ref={cardRef}
     >
-      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-hover:text-white" />
+      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-gray-400 group-hover:text-white dark:group-hover:text-black" />
       <article className="flex flex-col flex-1 min-w-0">
         <h4
           className="text-sm font-medium truncate SearchHighlight md:text-base"
           dangerouslySetInnerHTML={{ __html: title }}
         />
-        <div className="flex gap-4 text-xs font-light text-gray-600 md:text-sm group-hover:text-white">
+        <div className="flex gap-4 text-xs font-light text-gray-600 dark:text-search-info-dark md:text-sm group-hover:text-white dark:group-hover:text-black">
           <div className="flex gap-1">
             <AiOutlineHeart className="h-full" />
             <span>{hit.points}</span>
