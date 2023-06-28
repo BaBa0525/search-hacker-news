@@ -53,6 +53,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     hasNextPage,
     fetchNextPage,
   } = useSearchNews({ query });
+
   setIsLoading(isFetching);
 
   if (query === "" || isInitialLoading || !data) {

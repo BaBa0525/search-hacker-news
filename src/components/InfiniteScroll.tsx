@@ -1,10 +1,16 @@
+import { useLastElementRef } from "@/hooks/useLastElementRef";
 import type { SearchResults } from "@/types/api";
-import { useCallback, useRef } from "react";
+import type {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 import { ResultCard } from "./ResultCard";
 
 type InfiniteScrollProps = {
   pages: SearchResults[];
-  next: () => any;
+  next: (
+    options?: FetchNextPageOptions | undefined
+  ) => Promise<InfiniteQueryObserverResult<SearchResults, unknown>>;
   hasMore: boolean;
 };
 
@@ -13,25 +19,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   next,
   hasMore,
 }) => {
-  const observer = useRef<IntersectionObserver>();
-  const lastElementRef = useCallback<(node: HTMLLIElement | null) => void>(
-    (node) => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          next();
-        }
-      });
-
-      if (node) {
-        observer.current.observe(node);
-      }
-    },
-    [hasMore, next]
-  );
+  const lastElementRef = useLastElementRef({ hasMore, next });
 
   return (
     <div className="flex flex-col gap-4">
@@ -68,7 +56,7 @@ const PageSection: React.FC<PageSectionProps> = ({
       </h4>
       <ul className="flex flex-col gap-2">
         {page.hits.map((hit, postIndex) =>
-          isLastPage && page.hits.length === postIndex + 1 ? (
+          isLastPage && page.hits.length === postIndex + 2 ? (
             <li ref={lastElementRef} key={hit.objectID}>
               <ResultCard key={hit.objectID} hit={hit} />
             </li>
