@@ -10,6 +10,8 @@ https://search-hacker-news-five.vercel.app
 
 - RWD
   ![RWD](/README/RWD.png)
+- Dark Mode
+  ![Dark Mode](/README/dark-mode.png)
 
 ## Run Locally
 
