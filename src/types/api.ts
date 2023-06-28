@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type SearchResults = {
   hits: Hit[];
   nbHits: number;
