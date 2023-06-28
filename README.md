@@ -12,13 +12,13 @@ Integrate Hacker News API to provide better search experience.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/BaBa0525/search-hacker-news
 ```
 
 Go to the project directory
 
 ```bash
-  cd hacker-news-search
+  cd search-hacker-news
 ```
 
 Install dependencies
@@ -68,7 +68,7 @@ he Hacker News API offers outstanding search results in HTML format, which is hi
 ## Problem that I have encountered & How to solve them
 
 1. Hacker News API **NO TYPE**
-   I didn't notice any official type definition about the API calls. To address this, I took the sample output to generate the types. Although there are many "any" type, the types are good enough.
+   I couldn't find any official type definitions for the API calls initially. To overcome this, I generated the types by using the sample output as a reference. While there are instances where the "any" type is used, overall, the generated types are sufficient for my needs.
 
 2. UI design
-   This bothered me a lot because I'm not majored in design related department. However, UI is greatly affected the users' experiences, which I do really care about. To address this, I refered to the search components in many documentations.
+   I found this aspect quite challenging as my background is not in a design-related field. Nevertheless, I highly value the impact of the user interface (UI) on user experiences. In order to tackle this issue, I referred to the search components in many documentations for inspiration.
