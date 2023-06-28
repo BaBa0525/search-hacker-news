@@ -14,6 +14,7 @@ module.exports = {
         search: {
           bg: "#e5d6f3",
           line: "#aa186f",
+          help: "#5c5874",
         },
       },
     },

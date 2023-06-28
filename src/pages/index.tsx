@@ -5,10 +5,11 @@ import type { NextPage } from "next";
 const Home: NextPage = () => {
   return (
     <Layout>
-      <div className="flex flex-col items-center justify-center w-full h-3/4">
-        <SearchTable />
+      <div className="w-full">
+        <div className="fixed w-1/2 -translate-x-1/2 top-32 left-1/2 h-3/4">
+          <SearchTable />
+        </div>
       </div>
-      {/* <div className="fixed bottom-0 w-full h-10 bg-white/80">Footer</div> */}
     </Layout>
   );
 };

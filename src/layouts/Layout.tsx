@@ -9,9 +9,7 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
         <meta name="description" content="Cooby Search" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex flex-col items-center justify-center h-screen">
-        {children}
-      </main>
+      <main className="h-screen">{children}</main>
     </>
   );
 };
