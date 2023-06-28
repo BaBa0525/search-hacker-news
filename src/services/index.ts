@@ -17,6 +17,7 @@ export const getSearchResult = async ({
     query,
     hitsPerPage: hitsPerPage.toString(),
     page: page.toString(),
+    tags: "story",
   });
 
   const response = await fetch(`${API_URL}?${searchParams.toString()}`);
