@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.19",
+    "dompurify": "^3.0.3",
+    "html-react-parser": "^4.0.0",
     "next": "13.4.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.9",
+    "@types/dompurify": "^3.0.2",
     "@types/eslint": "^8.40.2",
     "@types/node": "20.3.2",
     "@types/react": "18.2.14",
