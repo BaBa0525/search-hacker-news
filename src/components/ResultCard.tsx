@@ -16,9 +16,11 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
     : hit.title;
 
   return (
-    <div className="flex flex-col gap-2 p-2 mx-6 bg-white rounded group hover:bg-search-line hover:text-white">
-      <a
-        href={hit.url}
+    <a
+      className="flex flex-col gap-2 p-2 bg-white rounded group hover:bg-search-line hover:text-white"
+      href={hit.url}
+    >
+      <h4
         className="text-lg font-medium SearchHighlight"
         dangerouslySetInnerHTML={{ __html: title }}
       />
@@ -27,6 +29,6 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
       } points by ${hit.author} on ${formatter.format(createdAt)} | ${
         hit.num_comments
       } comments`}</p>
-    </div>
+    </a>
   );
 };
