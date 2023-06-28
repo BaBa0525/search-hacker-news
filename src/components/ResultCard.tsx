@@ -1,5 +1,6 @@
 import type { Hit } from "@/types/api";
 import { sanitize } from "dompurify";
+import { useRef } from "react";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BsClock } from "react-icons/bs";
 import { GoComment } from "react-icons/go";
@@ -12,32 +13,41 @@ type ResultCardProps = {
 
 const formatter = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
 
-export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
-  const createdAt = new Date(hit.created_at);
-  const title = hit._highlightResult.title
-    ? sanitize(hit._highlightResult.title.value, {
-        USE_PROFILES: { html: true },
-      })
-    : hit.title;
+type Highlight = {
+  value: string;
+};
 
-  const author = hit._highlightResult.author
-    ? sanitize(hit._highlightResult.author.value, {
+const highlight = (highlight: Highlight, raw: string) => {
+  return highlight
+    ? sanitize(highlight.value, {
         USE_PROFILES: { html: true },
       })
-    : hit.author;
+    : raw;
+};
+
+export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
+  const cardRef = useRef<HTMLAnchorElement>(null);
+
+  const createdAt = new Date(hit.created_at);
+  const title = highlight(hit._highlightResult.title, hit.title);
+  const author = highlight(hit._highlightResult.author, hit.author);
 
   return (
     <a
-      className="flex items-center gap-4 p-2 bg-white rounded group hover:bg-search-line hover:text-white"
+      className="flex items-center gap-4 p-2 bg-white rounded group focus:bg-search-line focus:text-white"
       href={hit.url}
+      ref={cardRef}
+      onMouseEnter={() => {
+        cardRef.current?.focus();
+      }}
     >
-      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-hover:text-white" />
+      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-focus:text-white" />
       <article className="flex flex-col flex-1 min-w-0">
         <h4
-          className="font-medium truncate SearchHighlight"
+          className="text-sm font-medium truncate SearchHighlight md:text-base"
           dangerouslySetInnerHTML={{ __html: title }}
         />
-        <div className="flex gap-4 text-sm font-light text-gray-600 group-hover:text-white">
+        <div className="flex gap-4 text-xs font-light text-gray-600 md:text-sm group-focus:text-white">
           <div className="flex gap-1">
             <AiOutlineHeart className="h-full" />
             <span>{hit.points}</span>
@@ -62,23 +72,3 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hit }) => {
     </a>
   );
 };
-
-/**
- * <a
-      className="flex items-center gap-4 p-2 bg-white rounded group hover:bg-search-line hover:text-white"
-      href={hit.url}
-    >
-      <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-search-line group-hover:text-white" />
-      <article className="flex flex-col flex-1 min-w-0">
-        <h4
-          className="font-medium truncate SearchHighlight"
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
-        <p className="text-sm font-light text-gray-600 group-hover:text-white">{`${
-          hit.points
-        } points by ${author} on ${formatter.format(createdAt)} | ${
-          hit.num_comments
-        } comments`}</p>
-      </article>
-    </a>
- */
