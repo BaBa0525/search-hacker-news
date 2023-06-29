@@ -51,7 +51,11 @@ Or you can just run development server
 
 ## Tech Stack
 
-#### Typescript
+#### pnpm
+
+I have opted to use pnpm as my package manager because it's blazingly fast. Leveraging hard links under the hood, pnpm accelerates the installation process, resulting in a significant boost in speed.
+
+#### TypeScript
 
 I do like **Typesafe**.
 
@@ -71,10 +75,12 @@ Tanstack Query is an impressive package that offers robust asynchronous state ma
 
 The Hacker News API offers outstanding search results in HTML format, which is highly beneficial. However, parsing the HTML requires utilizing embedded HTML, which can be risky and possess potential security concerns. Therefore, I utilize this package to sanitize the HTML content for me, ensuring a safer and more secure implementation.
 
-## Problem that I have encountered & How to solve them
+## Problems that I have encountered & How to solve them
 
-1. Hacker News API **NO TYPE**
+1. Hacker News API provides **NO TYPE**
+
    I couldn't find any official type definitions for the API calls initially. To overcome this, I generated the types by using the sample output as a reference. While there are instances where the "any" type is used, overall, the generated types are sufficient for my needs.
 
 2. UI design
+
    I found this aspect quite challenging as my background is not in a design-related field. Nevertheless, I highly value the impact of the user interface (UI) on user experiences. In order to tackle this issue, I referred to the search components in many documentations for inspiration.
