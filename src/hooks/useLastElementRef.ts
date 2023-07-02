@@ -1,15 +1,8 @@
-import type { SearchResults } from "@/types/api";
-import type {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-} from "@tanstack/react-query";
 import { useCallback, useRef } from "react";
 
 type UseLastElementRefProps = {
   hasMore: boolean;
-  next: (
-    options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<SearchResults, unknown>>;
+  next: () => void | Promise<void>;
 };
 
 export const useLastElementRef = ({
@@ -17,7 +10,7 @@ export const useLastElementRef = ({
   next,
 }: UseLastElementRefProps) => {
   const observer = useRef<IntersectionObserver>();
-  return useCallback<(node: HTMLLIElement | null) => void>(
+  return useCallback<(node: HTMLElement | null) => void>(
     (node) => {
       if (observer.current) {
         observer.current.disconnect();

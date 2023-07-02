@@ -1,4 +1,6 @@
+import { HitProvider } from "@/context/HitContext";
 import { useSearchNews } from "@/hooks/useSearchNews";
+import { SearchResults } from "@/types/api";
 import { useIsFetching } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { FiSearch } from "react-icons/fi";
@@ -6,6 +8,7 @@ import { MdClose } from "react-icons/md";
 import { VscLoading } from "react-icons/vsc";
 import { InfiniteScroll } from "./InfiniteScroll";
 import { NotFoundIcon } from "./NotFoundIcon";
+import { ResultCard } from "./ResultCard";
 
 export const SearchTable: React.FC = () => {
   const [query, setQuery] = useState<string>("");
@@ -95,9 +98,53 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
     >
       <InfiniteScroll
         pages={data.pages}
-        next={fetchNextPage}
-        hasMore={hasNextPage ?? false}
-      />
+        getPageResult={(index, array) => array[index].hits}
+        hasNextPage={hasNextPage ?? false}
+        fetchNextPage={() => void fetchNextPage()}
+      >
+        {(props) => <PageSection {...props} />}
+      </InfiniteScroll>
     </section>
+  );
+};
+
+type PageSectionProps = {
+  page: SearchResults;
+  isLastPage: boolean;
+  lastElementRef: (node: HTMLLIElement | null) => void;
+  focusedResult?: number;
+};
+
+const PageSection: React.FC<PageSectionProps> = ({
+  page,
+  isLastPage,
+  lastElementRef,
+  focusedResult,
+}) => {
+  const resultStart = page.hitsPerPage * page.page + 1;
+  const resultEnd = page.hitsPerPage * page.page + page.hits.length;
+
+  return (
+    <div className="flex flex-col">
+      <h4 className="text-xs font-semibold md:text-sm text-search-line-light dark:text-search-line-dark">
+        {`Result ${resultStart} ~ ${resultEnd}`}
+      </h4>
+      <ul className="flex flex-col gap-2">
+        {page.hits.map((hit, postIndex) => {
+          const shouldBindRef =
+            isLastPage && postIndex + 2 === page.hits.length;
+
+          const isSelected = focusedResult === postIndex;
+
+          return (
+            <li key={hit.objectID} ref={shouldBindRef ? lastElementRef : null}>
+              <HitProvider value={hit}>
+                <ResultCard isSelected={isSelected} />
+              </HitProvider>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 };

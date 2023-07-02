@@ -11,3 +11,7 @@ body {
   @apply group-hover:text-white group-hover:underline group-hover:underline-offset-2;
   @apply dark:text-search-line-dark  dark:group-hover:text-black;
 }
+
+.SearchHighlightSelected em {
+  @apply not-italic text-white underline underline-offset-2 dark:text-black;
+}
