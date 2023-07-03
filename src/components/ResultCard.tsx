@@ -6,6 +6,7 @@ import { MdArticle } from "react-icons/md";
 import { PiUserLight } from "react-icons/pi";
 
 import { useHit } from "@/context/HitContext";
+import { useEffect, useRef } from "react";
 
 type ResultCardProps = {
   isSelected: boolean;
@@ -39,10 +40,22 @@ const SelectedCard = () => {
   const title = highlight(hit._highlightResult.title, hit.title);
   const author = highlight(hit._highlightResult.author, hit.author);
 
+  const selectedRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    () => {
+      selectedRef.current?.scrollIntoView({
+        behavior: "instant",
+        block: "nearest",
+      });
+    };
+  }, []);
+
   return (
     <a
       className="flex items-center gap-4 p-2 text-white rounded group bg-search-line-light dark:bg-search-line-dark"
       href={hit.url}
+      ref={selectedRef}
     >
       <MdArticle className="flex-shrink-0 w-6 h-6 ml-2 text-white dark:text-black" />
       <article className="flex flex-col flex-1 min-w-0 group-hover:text-white">
