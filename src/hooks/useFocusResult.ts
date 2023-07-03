@@ -8,9 +8,10 @@ type UseFocusResultProps<T> = {
   getPageResult: GetPageResult<T>;
 };
 
-const changePageActions = {
+export const changePageActions = {
   NEXT: "NEXT",
   PREV: "PREV",
+  FIRST: "FIRST",
 } as const;
 
 type ChangePageAction = {
@@ -23,7 +24,7 @@ type FocusedIndex = {
   result: number;
 };
 
-export const useFocusResult = <T>({
+export const useActiveResult = <T>({
   pages,
   getPageResult,
 }: UseFocusResultProps<T>) => {
@@ -59,7 +60,11 @@ export const useFocusResult = <T>({
     };
   }, [focusedIndex, getPageResult, pages, dispatch]);
 
-  return { focusedPage: focusedIndex.page, focusedResult: focusedIndex.result };
+  return {
+    focusedPage: focusedIndex.page,
+    focusedResult: focusedIndex.result,
+    dispatch,
+  };
 };
 
 const useControlFocusReducer = <T>(
@@ -87,7 +92,11 @@ const useControlFocusReducer = <T>(
           page: state.page,
           result: state.result - 1,
         }))
-        .otherwise(() => state);
+        .with({ type: changePageActions.FIRST }, () => ({
+          page: 0,
+          result: 0,
+        }))
+        .exhaustive();
     },
     { page: 0, result: 0 }
   );

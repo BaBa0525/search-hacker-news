@@ -57,7 +57,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
 
   useEffect(() => {
     if (isFetchedAfterMount) {
-      scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+      scrollRef.current?.scrollTo({
+        top: 0,
+        behavior: "instant",
+      });
     }
   }, [isFetchedAfterMount]);
 
@@ -101,6 +104,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
         getPageResult={(index, array) => array[index].hits}
         hasNextPage={hasNextPage ?? false}
         fetchNextPage={() => void fetchNextPage()}
+        resetActiveResult={isFetchedAfterMount}
       >
         {(props) => <PageSection {...props} />}
       </InfiniteScroll>

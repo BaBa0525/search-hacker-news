@@ -43,12 +43,10 @@ const SelectedCard = () => {
   const selectedRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    () => {
-      selectedRef.current?.scrollIntoView({
-        behavior: "instant",
-        block: "nearest",
-      });
-    };
+    selectedRef.current?.scrollIntoView({
+      behavior: "instant",
+      block: "nearest",
+    });
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { changePageActions, useActiveResult } from "@/hooks/useActiveResult";
+import { changePageActions, useActiveResult } from "@/hooks/useFocusResult";
 import { useLastElementRef } from "@/hooks/useLastElementRef";
 import type { ComponentProps, PropsWithChildren } from "react";
 import { useEffect, type ComponentType } from "react";
