@@ -3,7 +3,7 @@ import { useEffect, useReducer } from "react";
 import { match } from "ts-pattern";
 
 type GetPageResult<T, TData> = (index: number, array: T[]) => TData[];
-type GetUrl<TData> = (index: number, array: TData[]) => string;
+type GetUrl<T> = (index: number, array: T[]) => string;
 
 type UseFocusResultProps<T, TData> = {
   pages: T[];
