@@ -73,7 +73,7 @@ export const useActiveResult = <T, TData>({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedIndex, getPageResult, pages, dispatch]);
+  }, [focusedIndex, getPageResult, pages, dispatch, router, getUrl]);
 
   return {
     focusedPage: focusedIndex.page,
