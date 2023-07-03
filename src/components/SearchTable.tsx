@@ -102,6 +102,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
       <InfiniteScroll
         pages={data.pages}
         getPageResult={(index, array) => array[index].hits}
+        getUrl={(index, array) => array[index].url}
         hasNextPage={hasNextPage ?? false}
         fetchNextPage={() => void fetchNextPage()}
         resetActiveResult={isFetchedAfterMount}

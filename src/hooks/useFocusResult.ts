@@ -1,11 +1,14 @@
+import { useRouter } from "next/router";
 import { useEffect, useReducer } from "react";
 import { match } from "ts-pattern";
 
-type GetPageResult<T> = (index: number, array: T[]) => unknown[];
+type GetPageResult<T, TData> = (index: number, array: T[]) => TData[];
+type GetUrl<TData> = (index: number, array: TData[]) => string;
 
-type UseFocusResultProps<T> = {
+type UseFocusResultProps<T, TData> = {
   pages: T[];
-  getPageResult: GetPageResult<T>;
+  getPageResult: GetPageResult<T, TData>;
+  getUrl: GetUrl<TData>;
 };
 
 export const changePageActions = {
@@ -24,15 +27,17 @@ type FocusedIndex = {
   result: number;
 };
 
-export const useActiveResult = <T>({
+export const useActiveResult = <T, TData>({
   pages,
   getPageResult,
-}: UseFocusResultProps<T>) => {
+  getUrl,
+}: UseFocusResultProps<T, TData>) => {
   const [focusedIndex, dispatch] = useControlFocusReducer(pages, getPageResult);
+  const router = useRouter();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!["ArrowDown", "ArrowUp"].includes(event.key)) {
+      if (!["ArrowDown", "ArrowUp", "Enter"].includes(event.key)) {
         return;
       }
 
@@ -40,17 +45,27 @@ export const useActiveResult = <T>({
       event.stopPropagation();
 
       const pageResults = getPageResult(focusedIndex.page, pages);
-      if (event.key === "ArrowDown") {
-        dispatch({
-          type: changePageActions.NEXT,
-          changePage: focusedIndex.result === pageResults.length - 1,
+
+      match(event.key)
+        .with("ArrowDown", () => {
+          dispatch({
+            type: changePageActions.NEXT,
+            changePage: focusedIndex.result === pageResults.length - 1,
+          });
+        })
+        .with("ArrowUp", () => {
+          dispatch({
+            type: changePageActions.PREV,
+            changePage: focusedIndex.result === 0,
+          });
+        })
+        .with("Enter", () => {
+          const url = getUrl(focusedIndex.result, pageResults);
+          router.push(url);
+        })
+        .otherwise(() => {
+          throw new Error("Unhandled key");
         });
-      } else {
-        dispatch({
-          type: changePageActions.PREV,
-          changePage: focusedIndex.result === 0,
-        });
-      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -67,9 +82,9 @@ export const useActiveResult = <T>({
   };
 };
 
-const useControlFocusReducer = <T>(
+const useControlFocusReducer = <T, TData>(
   pages: T[],
-  getPageResult: GetPageResult<T>
+  getPageResult: GetPageResult<T, TData>
 ) => {
   return useReducer(
     (state: FocusedIndex, action: ChangePageAction) => {

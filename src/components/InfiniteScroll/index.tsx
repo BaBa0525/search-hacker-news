@@ -3,9 +3,10 @@ import { useLastElementRef } from "@/hooks/useLastElementRef";
 import type { ComponentProps, PropsWithChildren } from "react";
 import { useEffect, type ComponentType } from "react";
 
-export type InfiniteScrollProps<T> = {
+export type InfiniteScrollProps<T, TData> = {
   pages: T[];
-  getPageResult: (index: number, array: T[]) => unknown[];
+  getPageResult: (index: number, array: T[]) => TData[];
+  getUrl: (index: number, array: TData[]) => string;
   hasNextPage: boolean;
   resetActiveResult?: boolean;
   fetchNextPage: () => void | Promise<void>;
@@ -17,14 +18,15 @@ export type InfiniteScrollProps<T> = {
   }>;
 };
 
-export const InfiniteScroll = <T,>({
+export const InfiniteScroll = <T, TData>({
   pages,
   hasNextPage,
   resetActiveResult,
   getPageResult,
+  getUrl,
   fetchNextPage,
   children: Component,
-}: InfiniteScrollProps<T>) => {
+}: InfiniteScrollProps<T, TData>) => {
   // InfiniteScroll observer
   const lastElementRef = useLastElementRef({
     hasMore: hasNextPage,
@@ -35,6 +37,7 @@ export const InfiniteScroll = <T,>({
   const { focusedPage, focusedResult, dispatch } = useActiveResult({
     pages,
     getPageResult,
+    getUrl,
   });
 
   useEffect(() => {
