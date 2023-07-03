@@ -1,11 +1,13 @@
-import { useFocusResult } from "@/hooks/useFocusResult";
+import { changePageActions, useActiveResult } from "@/hooks/useActiveResult";
 import { useLastElementRef } from "@/hooks/useLastElementRef";
-import type { ComponentType } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
+import { useEffect, type ComponentType } from "react";
 
 export type InfiniteScrollProps<T> = {
   pages: T[];
   getPageResult: (index: number, array: T[]) => unknown[];
   hasNextPage: boolean;
+  resetActiveResult?: boolean;
   fetchNextPage: () => void | Promise<void>;
   children: ComponentType<{
     page: T;
@@ -18,6 +20,7 @@ export type InfiniteScrollProps<T> = {
 export const InfiniteScroll = <T,>({
   pages,
   hasNextPage,
+  resetActiveResult,
   getPageResult,
   fetchNextPage,
   children: Component,
@@ -29,10 +32,16 @@ export const InfiniteScroll = <T,>({
   });
 
   // Add event listener to arrow keys
-  const { focusedPage, focusedResult } = useFocusResult({
+  const { focusedPage, focusedResult, dispatch } = useActiveResult({
     pages,
     getPageResult,
   });
+
+  useEffect(() => {
+    if (resetActiveResult) {
+      dispatch({ type: changePageActions.FIRST, changePage: true });
+    }
+  }, [resetActiveResult, dispatch]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -48,3 +57,13 @@ export const InfiniteScroll = <T,>({
     </div>
   );
 };
+
+type LinkProps = PropsWithChildren<ComponentProps<"a">>;
+
+const InfiniteScrollLink = ({ children, ...props }: LinkProps) => {
+  return <a {...props}>{children}</a>;
+};
+
+InfiniteScrollLink.displayName = "InfiniteScroll.Link";
+
+InfiniteScroll.Link = InfiniteScrollLink;
