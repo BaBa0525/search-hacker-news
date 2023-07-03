@@ -1,14 +1,15 @@
 import { HitProvider } from "@/context/HitContext";
 import { useSearchNews } from "@/hooks/useSearchNews";
-import { SearchResults } from "@/types/api";
 import { useIsFetching } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
 import { VscLoading } from "react-icons/vsc";
-import { InfiniteScroll } from "./InfiniteScroll";
 import { NotFoundIcon } from "./NotFoundIcon";
 import { ResultCard } from "./ResultCard";
+
+import { useVirtaulActiveResult } from "@/hooks/useVirtualActiveResult";
+import { InfiniteScroll } from "./InfiniteScroll/virtual";
 
 export const SearchTable: React.FC = () => {
   const [query, setQuery] = useState<string>("");
@@ -45,21 +46,35 @@ type SearchResultsProps = {
 };
 
 const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
-  const scrollRef = useRef<HTMLElement>(null);
   const {
     data,
     isInitialLoading,
+    isFetchedAfterMount,
     isError,
     hasNextPage,
-    isFetchedAfterMount,
     fetchNextPage,
+    isFetchingNextPage,
   } = useSearchNews({ query });
+
+  const allRows = useMemo(() => {
+    return data?.pages.flatMap((p) => p.hits) ?? [];
+  }, [data?.pages]);
+
+  const onReachEnd = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const { focusedIndex, first } = useVirtaulActiveResult({
+    items: allRows,
+  });
 
   useEffect(() => {
     if (isFetchedAfterMount) {
-      scrollRef.current?.scrollTo({ top: 0, behavior: "instant" });
+      first();
     }
-  }, [isFetchedAfterMount]);
+  }, [isFetchedAfterMount, first]);
 
   if (query === "" || isInitialLoading || !data) {
     return (
@@ -92,59 +107,59 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
   }
 
   return (
-    <section
-      className="px-6 overflow-y-auto scrollbar-thin scrollbar-thumb-search-scrollbar-light dark:scrollbar-thumb-search-scrollbar-dark scrollbar-thumb-rounded-full"
-      ref={scrollRef}
+    <InfiniteScroll
+      data={allRows}
+      hasNextPage={hasNextPage || false}
+      estimateSize={60}
+      onReachEnd={onReachEnd}
+      activeIndex={focusedIndex}
     >
-      <InfiniteScroll
-        pages={data.pages}
-        getPageResult={(index, array) => array[index].hits}
-        hasNextPage={hasNextPage ?? false}
-        fetchNextPage={() => void fetchNextPage()}
-      >
-        {(props) => <PageSection {...props} />}
-      </InfiniteScroll>
-    </section>
+      {({ item, isActive }) => (
+        <HitProvider value={item}>
+          <ResultCard isSelected={isActive} />
+        </HitProvider>
+      )}
+    </InfiniteScroll>
   );
 };
 
-type PageSectionProps = {
-  page: SearchResults;
-  isLastPage: boolean;
-  lastElementRef: (node: HTMLLIElement | null) => void;
-  focusedResult?: number;
-};
+// type PageSectionProps = {
+//   page: SearchResults;
+//   isLastPage: boolean;
+//   lastElementRef: (node: HTMLLIElement | null) => void;
+//   focusedResult?: number;
+// };
 
-const PageSection: React.FC<PageSectionProps> = ({
-  page,
-  isLastPage,
-  lastElementRef,
-  focusedResult,
-}) => {
-  const resultStart = page.hitsPerPage * page.page + 1;
-  const resultEnd = page.hitsPerPage * page.page + page.hits.length;
+// const PageSection: React.FC<PageSectionProps> = ({
+//   page,
+//   isLastPage,
+//   lastElementRef,
+//   focusedResult,
+// }) => {
+//   const resultStart = page.hitsPerPage * page.page + 1;
+//   const resultEnd = page.hitsPerPage * page.page + page.hits.length;
 
-  return (
-    <div className="flex flex-col">
-      <h4 className="text-xs font-semibold md:text-sm text-search-line-light dark:text-search-line-dark">
-        {`Result ${resultStart} ~ ${resultEnd}`}
-      </h4>
-      <ul className="flex flex-col gap-2">
-        {page.hits.map((hit, postIndex) => {
-          const shouldBindRef =
-            isLastPage && postIndex + 2 === page.hits.length;
+//   return (
+//     <div className="flex flex-col">
+//       <h4 className="text-xs font-semibold md:text-sm text-search-line-light dark:text-search-line-dark">
+//         {`Result ${resultStart} ~ ${resultEnd}`}
+//       </h4>
+//       <ul className="flex flex-col gap-2">
+//         {page.hits.map((hit, postIndex) => {
+//           const shouldBindRef =
+//             isLastPage && postIndex + 2 === page.hits.length;
 
-          const isSelected = focusedResult === postIndex;
+//           const isSelected = focusedResult === postIndex;
 
-          return (
-            <li key={hit.objectID} ref={shouldBindRef ? lastElementRef : null}>
-              <HitProvider value={hit}>
-                <ResultCard isSelected={isSelected} />
-              </HitProvider>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-};
+//           return (
+//             <li key={hit.objectID} ref={shouldBindRef ? lastElementRef : null}>
+//               <HitProvider value={hit}>
+//                 <ResultCard isSelected={isSelected} />
+//               </HitProvider>
+//             </li>
+//           );
+//         })}
+//       </ul>
+//     </div>
+//   );
+// };

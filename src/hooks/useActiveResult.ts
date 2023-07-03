@@ -3,14 +3,15 @@ import { match } from "ts-pattern";
 
 type GetPageResult<T> = (index: number, array: T[]) => unknown[];
 
-type UseFocusResultProps<T> = {
+type UseActiveResultProps<T> = {
   pages: T[];
   getPageResult: GetPageResult<T>;
 };
 
-const changePageActions = {
+export const changePageActions = {
   NEXT: "NEXT",
   PREV: "PREV",
+  FIRST: "FIRST",
 } as const;
 
 type ChangePageAction = {
@@ -18,15 +19,15 @@ type ChangePageAction = {
   changePage: boolean;
 };
 
-type FocusedIndex = {
+type ActiveIndex = {
   page: number;
   result: number;
 };
 
-export const useFocusResult = <T>({
+export const useActiveResult = <T>({
   pages,
   getPageResult,
-}: UseFocusResultProps<T>) => {
+}: UseActiveResultProps<T>) => {
   const [focusedIndex, dispatch] = useControlFocusReducer(pages, getPageResult);
 
   useEffect(() => {
@@ -59,7 +60,11 @@ export const useFocusResult = <T>({
     };
   }, [focusedIndex, getPageResult, pages, dispatch]);
 
-  return { focusedPage: focusedIndex.page, focusedResult: focusedIndex.result };
+  return {
+    focusedPage: focusedIndex.page,
+    focusedResult: focusedIndex.result,
+    dispatch,
+  };
 };
 
 const useControlFocusReducer = <T>(
@@ -67,7 +72,7 @@ const useControlFocusReducer = <T>(
   getPageResult: GetPageResult<T>
 ) => {
   return useReducer(
-    (state: FocusedIndex, action: ChangePageAction) => {
+    (state: ActiveIndex, action: ChangePageAction) => {
       return match(action)
         .with({ type: changePageActions.NEXT, changePage: true }, () => ({
           page: (state.page + 1) % pages.length,
@@ -87,7 +92,11 @@ const useControlFocusReducer = <T>(
           page: state.page,
           result: state.result - 1,
         }))
-        .otherwise(() => state);
+        .with({ type: changePageActions.FIRST }, () => ({
+          page: 0,
+          result: 0,
+        }))
+        .exhaustive();
     },
     { page: 0, result: 0 }
   );
